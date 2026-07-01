@@ -105,29 +105,23 @@ def breadthFirstSearch(problem):
     Search the shallowest nodes in the search tree first.
     [2nd Edition: p 73, 3rd Edition: p 82]
     """
-    # Same setup as DFS
     fringeLocations = util.Queue()
-    startingPoint = (problem.getStartState(), {})
+    startingPoint = (problem.getStartState(), [])
     fringeLocations.push(startingPoint)
-    vistedLocations = set([])
+    visitedLocations = set([])
 
-    while True:
-        # Same setup as DFS
-        if fringeLocations.isEmpty():
-            return 'Fail'
-        else:
-            nextLocation = fringeLocations.pop()
-        # Same setup as DFS
-        if not nextLocation[0] in vistedLocations:
-            vistedLocations.add(nextLocation[0])
-            successor = problem.getSuccessors(nextLocation[0])
+    while not fringeLocations.isEmpty():
+        state, actions = fringeLocations.pop()
+        if problem.isGoalState(state):
+            return actions
+        if state in visitedLocations:
+            continue
+        visitedLocations.add(state)
+        for successor, action, stepCost in problem.getSuccessors(state):
+            if successor not in visitedLocations:
+                fringeLocations.push((successor, actions + [action]))
 
-            for i in range(len(successor)):
-                path = list(nextLocation[1])
-                path.append(successor[i][1])
-                fringeLocations.push((successor[i][0], path))
-                if problem.isGoalState(nextLocation[0]):
-                    return nextLocation[1]
+    return []
 
     util.raiseNotDefined()
 

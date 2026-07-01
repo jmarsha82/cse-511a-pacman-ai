@@ -93,12 +93,12 @@ class CrawlingRobotEnvironment(environment.Environment):
          newHandAngle = self.handBuckets[handBucket-1]
          self.crawlingRobot.moveHand(newHandAngle)
          nextState = (armBucket,handBucket-1)
-         
+
        newX,newY = self.crawlingRobot.getRobotPosition()
-       
+
        # a simple reward function
        reward = newX - oldX
-       
+
        self.state = nextState
        return nextState, reward
 
@@ -123,7 +123,7 @@ class CrawlingRobotEnvironment(environment.Environment):
 
 
 class CrawlingRobot:
-    
+
     def setAngles(self, armAngle, handAngle):
         """
             set the robot's arm and hand angles
@@ -131,13 +131,13 @@ class CrawlingRobot:
         """
         self.armAngle = armAngle
         self.handAngle = handAngle
-        
+
     def getAngles(self):
         """
             returns the pair of (armAngle, handAngle)
         """
         return self.armAngle, self.handAngle
-            
+
     def getRobotPosition(self):
         """
             returns the (x,y) coordinates
@@ -145,44 +145,44 @@ class CrawlingRobot:
             robot
         """
         return self.robotPos
-    
+
     def moveArm(self, newArmAngle):
         """
             move the robot arm to 'newArmAngle'
         """
         oldArmAngle = self.armAngle
         if newArmAngle > self.maxArmAngle:
-            raise 'Crawling Robot: Arm Raised too high. Careful!'
+            raise ValueError('Crawling Robot: Arm Raised too high. Careful!')
         if newArmAngle < self.minArmAngle:
-            raise 'Crawling Robot: Arm Raised too low. Careful!'
-        disp = self.displacement(self.armAngle, self.handAngle, 
+            raise ValueError('Crawling Robot: Arm Raised too low. Careful!')
+        disp = self.displacement(self.armAngle, self.handAngle,
                                   newArmAngle, self.handAngle)
         curXPos = self.robotPos[0]
         self.robotPos = (curXPos+disp, self.robotPos[1])
         self.armAngle = newArmAngle
-        
+
         # Position and Velocity Sign Post
         self.positions.append(self.getRobotPosition()[0])
 #        self.angleSums.append(abs(math.degrees(oldArmAngle)-math.degrees(newArmAngle)))
         if len(self.positions) > 100:
             self.positions.pop(0)
  #           self.angleSums.pop(0)
-        
+
     def moveHand(self, newHandAngle):
         """
-            move the robot hand to 'newArmAngle' 
+            move the robot hand to 'newArmAngle'
         """
         oldHandAngle = self.handAngle
-        
+
         if newHandAngle > self.maxHandAngle:
-            raise 'Crawling Robot: Hand Raised too high. Careful!'
+            raise ValueError('Crawling Robot: Hand Raised too high. Careful!')
         if newHandAngle < self.minHandAngle:
-            raise 'Crawling Robot: Hand Raised too low. Careful!'
+            raise ValueError('Crawling Robot: Hand Raised too low. Careful!')
         disp = self.displacement(self.armAngle, self.handAngle, self.armAngle, newHandAngle)
         curXPos = self.robotPos[0]
         self.robotPos = (curXPos+disp, self.robotPos[1])
         self.handAngle = newHandAngle
-        
+
         # Position and Velocity Sign Post
         self.positions.append(self.getRobotPosition()[0])
  #       self.angleSums.append(abs(math.degrees(oldHandAngle)-math.degrees(newHandAngle)))
@@ -201,12 +201,12 @@ class CrawlingRobot:
         """
             get the lower- and upper- bound
             for the hand angles returns (min,max) pair
-        """        
+        """
         return self.minHandAngle, self.maxHandAngle
-    
+
     def getRotationAngle(self):
         """
-            get the current angle the 
+            get the current angle the
             robot body is rotated off the ground
         """
         armCos, armSin = self.__getCosAndSin(self.armAngle)
@@ -220,10 +220,10 @@ class CrawlingRobot:
 
     ## You shouldn't need methods below here
 
-        
+
     def __getCosAndSin(self, angle):
         return math.cos(angle), math.sin(angle)
-                 
+
     def displacement(self, oldArmDegree, oldHandDegree, armDegree, handDegree):
 
         oldArmCos, oldArmSin = self.__getCosAndSin(oldArmDegree)
@@ -246,15 +246,15 @@ class CrawlingRobot:
                 return 0.0
             return -(x - y * (xOld-x)/(yOld-y)) + math.sqrt(xOld*xOld + yOld*yOld)
 
-        raise 'Never Should See This!'
-    
+        raise RuntimeError('Never Should See This!')
+
     def draw(self, stepCount, stepDelay):
         x1, y1 = self.getRobotPosition()
         x1 = x1 % self.totWidth
 
         ## Check Lower Still on the ground
         if y1 != self.groundY:
-            raise 'Flying Robot!!'
+            raise RuntimeError('Flying Robot!!')
 
         rotationAngle = self.getRotationAngle()
         cosRot, sinRot = self.__getCosAndSin(rotationAngle)
@@ -267,7 +267,7 @@ class CrawlingRobot:
 
         x4 = x3 + cosRot*self.robotWidth
         y4 = y3 - sinRot*self.robotWidth
-        
+
         self.canvas.coords(self.robotBody,x1,y1,x2,y2,x4,y4,x3,y3)
 
         armCos, armSin = self.__getCosAndSin(rotationAngle+self.armAngle)
@@ -281,7 +281,7 @@ class CrawlingRobot:
         yHand = yArm - self.handLength * handSin
 
         self.canvas.coords(self.robotHand,xArm,yArm,xHand,yHand)
-    
+
 
         # Position and Velocity Sign Post
 #        time = len(self.positions) + 0.5 * sum(self.angleSums)
@@ -290,19 +290,19 @@ class CrawlingRobot:
         steps = (stepCount - self.lastStep)
         if steps==0:return
  #       pos = self.positions[-1]
-#        velocity = (pos - self.lastPos) / steps 
+#        velocity = (pos - self.lastPos) / steps
   #      g = .9 ** (10 * stepDelay)
 #        g = .99 ** steps
-#        self.velAvg = g * self.velAvg + (1 - g) * velocity 
+#        self.velAvg = g * self.velAvg + (1 - g) * velocity
  #       g = .999 ** steps
- #       self.velAvg2 = g * self.velAvg2 + (1 - g) * velocity 
+ #       self.velAvg2 = g * self.velAvg2 + (1 - g) * velocity
         pos = self.positions[-1]
         velocity = pos - self.positions[-2]
         vel2 = (pos - self.positions[0]) / len(self.positions)
         self.velAvg = .9 * self.velAvg + .1 * vel2
-        velMsg = '100-step Avg Velocity: %.2f' % self.velAvg   
-#        velMsg2 = '1000-step Avg Velocity: %.2f' % self.velAvg2   
-        velocityMsg = 'Velocity: %.2f' % velocity   
+        velMsg = '100-step Avg Velocity: %.2f' % self.velAvg
+#        velMsg2 = '1000-step Avg Velocity: %.2f' % self.velAvg2
+        velocityMsg = 'Velocity: %.2f' % velocity
         positionMsg = 'Position: %2.f' % pos
         stepMsg = 'Step: %d' % stepCount
         if 'vel_msg' in dir(self):
@@ -311,15 +311,15 @@ class CrawlingRobot:
             self.canvas.delete(self.step_msg)
             self.canvas.delete(self.velavg_msg)
  #           self.canvas.delete(self.velavg2_msg)
- #       self.velavg2_msg = self.canvas.create_text(850,190,text=velMsg2) 
-        self.velavg_msg = self.canvas.create_text(650,190,text=velMsg) 
-        self.vel_msg = self.canvas.create_text(450,190,text=velocityMsg) 
+ #       self.velavg2_msg = self.canvas.create_text(850,190,text=velMsg2)
+        self.velavg_msg = self.canvas.create_text(650,190,text=velMsg)
+        self.vel_msg = self.canvas.create_text(450,190,text=velocityMsg)
         self.pos_msg = self.canvas.create_text(250,190,text=positionMsg)
         self.step_msg = self.canvas.create_text(50,190,text=stepMsg)
 #        self.lastPos = pos
         self.lastStep = stepCount
 #        self.lastVel = velocity
-    
+
     def __init__(self, canvas):
 
         ## Canvas ##
@@ -345,7 +345,7 @@ class CrawlingRobot:
         self.totHeight = canvas.winfo_reqheight()
         self.groundHeight = 40
         self.groundY = self.totHeight - self.groundHeight
-        
+
         self.ground = canvas.create_rectangle(0,
             self.groundY,self.totWidth,self.totHeight, fill='blue')
 
@@ -365,11 +365,11 @@ class CrawlingRobot:
 
         self.positions = [0,0]
   #      self.angleSums = [0,0]
- 
 
 
-if __name__ == '__main__':      
+
+if __name__ == '__main__':
   from graphicsCrawlerDisplay import *
   run()
 
- 
+

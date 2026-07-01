@@ -107,7 +107,7 @@ class GreedyBustersAgent(BustersAgent):
     closest=bestD= float('inf')
     ghostPos = set()
     for dist in livingGhostPositionDistributions:
-			ghostPos.add(dist.argMax()) 
+        ghostPos.add(dist.argMax())
     for x in ghostPos:
         dist2Pacman = self.distancer.getDistance(pacmanPosition, x)
         if dist2Pacman < closest:

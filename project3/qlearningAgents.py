@@ -98,6 +98,8 @@ class QLearningAgent(ReinforcementAgent):
     legalActions = self.getLegalActions(state)
     action = None
     "*** YOUR CODE HERE ***"
+    if not legalActions:
+      return action
     if util.flipCoin(self.epsilon):
       return random.choice(legalActions)
     else:
@@ -174,7 +176,6 @@ class ApproximateQAgent(PacmanQAgent):
     #  wYou mightant to initialize weights here.
     "*** YOUR CODE HERE ***"
     self.weights = util.Counter()
-    self.weights = 0
 
   def getWeights(self):
     return self.weights
@@ -208,7 +209,7 @@ class ApproximateQAgent(PacmanQAgent):
         difference_reward = reward - self.getQValue(state, action)
       else:
         fReward = max([self.getQValue(nextState, nextAction) for nextAction in self.getLegalActions(nextState)])
-        difference_reward = (reward + self.discount * fReward)
+        difference_reward = (reward + self.discount * fReward) - self.getQValue(state, action)
       self.weights[f] = self.weights[f] + self.alpha * difference_reward * feature[f]
 
 
