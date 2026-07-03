@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pacman AI Lab</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <aside class="sidebar" aria-label="Project navigation">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <div>
+            <h1>Pacman AI Lab</h1>
+            <p>CSE 511A assignment archive</p>
+          </div>
+        </div>
+        <nav class="project-list">
+          <button class="project-item active" data-project="0">Project 0 <span>Python warm-up</span></button>
+          <button class="project-item" data-project="1">Project 1 <span>Search</span></button>
+          <button class="project-item" data-project="2">Project 2 <span>Multi-agent</span></button>
+          <button class="project-item" data-project="3">Project 3 <span>Reinforcement</span></button>
+          <button class="project-item" data-project="4">Project 4 <span>Inference</span></button>
+        </nav>
+      </aside>
+
+      <section class="workspace" aria-live="polite">
+        <header class="toolbar">
+          <div>
+            <p class="section-label">Repository dashboard</p>
+            <h2 id="project-title">Project 0: Python Warm-Up</h2>
+          </div>
+          <div class="status-pair">
+            <span class="status good">Tests 95%</span>
+            <span class="status info">Python 3.12</span>
+          </div>
+        </header>
+
+        <section class="map-panel" aria-label="Project map">
+          <div class="maze">
+            <span class="node node-start active" data-node="0">P0</span>
+            <span class="node node-search" data-node="1">P1</span>
+            <span class="node node-agent" data-node="2">P2</span>
+            <span class="node node-rl" data-node="3">P3</span>
+            <span class="node node-infer" data-node="4">P4</span>
+            <span class="path path-one"></span>
+            <span class="path path-two"></span>
+            <span class="path path-three"></span>
+            <span class="path path-four"></span>
+          </div>
+          <article class="project-card">
+            <p id="project-kicker">Unit-tested module</p>
+            <h3 id="project-name">Fruit shop utilities</h3>
+            <p id="project-description">
+              Introductory Python exercises for ordering fruit, comparing shops, list comprehensions, and quick sort.
+            </p>
+            <dl>
+              <div><dt>Primary files</dt><dd id="project-files">project0/buyLotsOfFruit.py, shop.py, shopSmart.py</dd></div>
+              <div><dt>Test focus</dt><dd id="project-tests">order totals, missing fruit, lowest-cost shop selection</dd></div>
+            </dl>
+          </article>
+        </section>
+      </section>
+
+      <aside class="pipeline" aria-label="Pipeline status">
+        <section class="pipeline-card">
+          <h2>Unit Tests</h2>
+          <p>Pytest plus coverage validates the core student-authored algorithm modules.</p>
+          <strong>15 passing</strong>
+        </section>
+        <section class="pipeline-card">
+          <h2>Code Scanning</h2>
+          <div class="scan-row"><span>Quality</span><strong>Ruff SARIF</strong></div>
+          <div class="scan-row"><span>Security</span><strong>CodeQL</strong></div>
+        </section>
+        <section class="pipeline-card">
+          <h2>Automation</h2>
+          <p>Dependabot watches Python test dependencies and GitHub Actions versions.</p>
+          <strong>weekly</strong>
+        </section>
+      </aside>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>

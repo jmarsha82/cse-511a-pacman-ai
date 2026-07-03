@@ -1,17 +1,17 @@
 # distanceCalculator.py
 
 """
-This file contains a Distancer object which computes and 
-caches the shortest path between any two points in the maze. It 
+This file contains a Distancer object which computes and
+caches the shortest path between any two points in the maze. It
 returns a Manhattan distance between two points if the maze distance
-has not yet been calculated. 
+has not yet been calculated.
 
 Example:
 distancer = Distancer(gameState.data.layout)
 distancer.getDistance( (1,1), (10,10) )
 
-The Distancer object also serves as an example of sharing data 
-safely among agents via a global dictionary (distanceMap), 
+The Distancer object also serves as an example of sharing data
+safely among agents via a global dictionary (distanceMap),
 and performing asynchronous computation via threads. These
 examples may help you in designing your own objects, but you
 shouldn't need to modify the Distancer code in order to use its
@@ -24,15 +24,15 @@ class Distancer:
   def __init__(self, layout, background=True, default=10000):
     """
     Initialize with Distancer(layout).  Changing default is unnecessary.
-    
+
     This will start computing maze distances in the background and use them
     as soon as they are ready.  In the meantime, it returns manhattan distance.
-    
+
     To compute all maze distances on initialization, set background=False
     """
     self._distances = None
     self.default = default
-    
+
     # Start computing distances in the background; when the dc finishes,
     # it will fill in self._distances for us.
     dc = DistanceCalculator()
@@ -42,7 +42,7 @@ class Distancer:
       dc.start()
     else:
       dc.run()
-    
+
   def getDistance(self, pos1, pos2):
     """
     The getDistance function is the only one you'll need after you create the object.
@@ -85,13 +85,13 @@ def getGrids2D(pos):
     for y, yDistance in getGrids1D(pos[1]):
       grids.append(((x, y), xDistance + yDistance))
   return grids
-  
+
 def getGrids1D(x):
   intX = int(x)
   if x == int(x):
     return [(x, 0)]
   return [(intX, x-intX), (intX+1, intX+1-x)]
-  
+
 ##########################################
 # MACHINERY FOR COMPUTING MAZE DISTANCES #
 ##########################################
@@ -110,7 +110,7 @@ class DistanceCalculator(threading.Thread):
     self.layout = layout
     self.distancer = distancer
     self.default = default
-  
+
   def run(self):
     global distanceMap, distanceThread
     distanceMapSemaphore.acquire()
@@ -120,7 +120,7 @@ class DistanceCalculator(threading.Thread):
       distanceThread = self
 
       distances = computeDistances(self.layout)
-      print >>sys.stdout, '[Distancer]: Switching to maze distances' 
+      print('[Distancer]: Switching to maze distances', file=sys.stdout)
 
       distanceMap[self.layout.walls] = distances
       distanceThread = None
@@ -128,7 +128,7 @@ class DistanceCalculator(threading.Thread):
       distances = distanceMap[self.layout.walls]
 
     distanceMapSemaphore.release()
-    self.distancer._distances = distances  
+    self.distancer._distances = distances
 
 def computeDistances(layout):
     distances = {}
@@ -137,7 +137,7 @@ def computeDistances(layout):
         dist = {}
         closed = {}
         for node in allNodes:
-            dist[node] = sys.maxint
+            dist[node] = sys.maxsize
         import util
         queue = util.PriorityQueue()
         queue.push(source, 0)
@@ -169,11 +169,11 @@ def computeDistances(layout):
         for target in allNodes:
             distances[(target, source)] = dist[target]
     return distances
-    
+
 
 def getDistanceOnGrid(distances, pos1, pos2):
     key = (pos1, pos2)
     if key in distances:
       return distances[key]
     return 100000
-  
+

@@ -12,7 +12,7 @@ class FruitShop:
         """
         self.fruitPrices = fruitPrices
         self.name = name
-        print 'Welcome to %s fruit shop' % (name)
+        print('Welcome to %s fruit shop' % (name))
         
     def getCostPerPound(self, fruit):
         """
@@ -21,7 +21,7 @@ class FruitShop:
         is in our inventory or None otherwise
         """
         if fruit not in self.fruitPrices:
-            print "Sorry we don't have %s" % (fruit)
+            print("Sorry we don't have %s" % (fruit))
             return None
         return self.fruitPrices[fruit]
         

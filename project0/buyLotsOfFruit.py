@@ -26,7 +26,7 @@ def buyLotsOfFruit(orderList):
         if fruit in fruitPrices:
             totalCost += cost * fruitPrices[fruit]
         else:
-            print "Error: Fruit not in Order"
+            print("Error: Fruit not in Order")
             return None
 
     return totalCost
@@ -36,4 +36,4 @@ def buyLotsOfFruit(orderList):
 if __name__ == '__main__':
     "This code runs when you invoke the script from the command line"
     orderList = [('apples', 2.0), ('pears', 3.0), ('limes', 4.0)]
-    print 'Cost of', orderList, 'is', buyLotsOfFruit(orderList)
+    print('Cost of', orderList, 'is', buyLotsOfFruit(orderList))

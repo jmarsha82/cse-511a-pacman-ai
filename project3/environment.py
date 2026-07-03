@@ -4,36 +4,36 @@
 #!/usr/bin/python
 
 class Environment:
-        
+
   def getCurrentState(self):
     """
     Returns the current state of enviornment
     """
-    abstract
-    
+    raise NotImplementedError
+
   def getPossibleActions(self, state):
     """
-      Returns possible actions the agent 
+      Returns possible actions the agent
       can take in the given state. Can
-      return the empty list if we are in 
+      return the empty list if we are in
       a terminal state.
     """
-    abstract
-                
+    raise NotImplementedError
+
   def doAction(self, action):
     """
       Performs the given action in the current
       environment state and updates the enviornment.
-    
+
       Returns a (reward, nextState) pair
     """
-    abstract
-        
+    raise NotImplementedError
+
   def reset(self):
     """
       Resets the current state to the start state
     """
-    abstract
+    raise NotImplementedError
 
   def isTerminal(self):
     """
@@ -43,4 +43,4 @@ class Environment:
     state = self.getCurrentState()
     actions = self.getPossibleActions(state)
     return len(actions) == 0
-    
+

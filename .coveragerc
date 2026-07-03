@@ -1,0 +1,16 @@
+[run]
+include =
+    project0/buyLotsOfFruit.py
+    project0/shop.py
+    project0/shopSmart.py
+    project1/search.py
+    project3/qlearningAgents.py
+    project3/valueIterationAgents.py
+omit =
+    tests/*
+
+[report]
+show_missing = true
+exclude_also =
+    if __name__ == .__main__.:
+    util.raiseNotDefined\(\)

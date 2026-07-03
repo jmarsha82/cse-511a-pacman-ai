@@ -34,7 +34,7 @@ class InferenceModule:
             self.index)  # The position you set
         actionDist = self.ghostAgent.getDistribution(gameState)
         dist = util.Counter()
-        for action, prob in actionDist.items():
+        for action, prob in list(actionDist.items()):
             successorPosition = game.Actions.getSuccessor(
                 ghostPosition, action)
             dist[successorPosition] = prob
@@ -189,7 +189,7 @@ class ExactInference(InferenceModule):
                 continue
             newPosDist = self.getPositionDistribution(
                 self.setGhostPosition(gameState, x))
-            for y, z in newPosDist.items():
+            for y, z in list(newPosDist.items()):
                 updated[y] = updated[y] + (z * self.beliefs[x])
         updated.normalize()
         self.beliefs = updated
@@ -324,7 +324,7 @@ class MarginalInference(InferenceModule):
         "Returns the marginal belief over a particular ghost by summing out the others."
         jointDistribution = jointInference.getBeliefDistribution()
         dist = util.Counter()
-        for t, prob in jointDistribution.items():
+        for t, prob in list(jointDistribution.items()):
             dist[t[self.index - 1]] += prob
         return dist
 
@@ -403,7 +403,7 @@ class JointParticleFilter:
         parList = list()
         parListTemp = list()
         active = gameState.getLivingGhosts()
-        inactive = range(self.numGhosts)
+        inactive = list(range(self.numGhosts))
         for i in range(self.numGhosts):
             inactive[i] = self.getJailPosition(i)
         newParticles = []
@@ -463,7 +463,7 @@ class JointParticleFilter:
 
         for oldPs in self.particles:
             newParticle = list(oldPs)
-            rangeNumGhost = range(self.numGhosts)
+            rangeNumGhost = list(range(self.numGhosts))
             for i in rangeNumGhost:
                 # Check for captured ghost
                 if noisyDistances[i] == None:
@@ -506,7 +506,7 @@ def getPositionDistributionForGhost(gameState, ghostIndex, agent):
     ghostPosition = gameState.getGhostPosition(ghostIndex+1)
     actionDist = agent.getDistribution(gameState)
     dist = util.Counter()
-    for action, prob in actionDist.items():
+    for action, prob in list(actionDist.items()):
         successorPosition = game.Actions.getSuccessor(ghostPosition, action)
         dist[successorPosition] = prob
     return dist
